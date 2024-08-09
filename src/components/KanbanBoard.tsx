@@ -1,4 +1,4 @@
-import React, { useState, DragEvent } from "react";
+import React, { useState, DragEvent, useEffect } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
@@ -44,7 +44,14 @@ const KanbanBoard: React.FC = () => {
 };
 
 const Board: React.FC = () => {
-  const [cards, setCards] = useState<Card[]>(DEFAULT_CARDS);
+  const localCards = localStorage.getItem("cards");
+  const [cards, setCards] = useState<Card[]>(
+    localCards ? JSON.parse(localCards) : DEFAULT_CARDS
+  );
+
+  useEffect(() => {
+    localStorage.setItem("cards", JSON.stringify(cards));
+  }, [cards]);
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
